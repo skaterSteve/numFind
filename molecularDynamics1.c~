@@ -1,0 +1,95 @@
+#include <time.h>
+#include <math.h>
+#include <stdlib.h>
+#include <stdio.h>
+
+double f(double x)
+{
+  return - x - x*x*x;
+}
+
+
+int main(void)
+{
+    int N = 10;
+    double v[N];
+    int k, num;
+    double sum;
+    int taken[N];                        // shows whether a given number is already taken 
+    double E = (double)N/2.0;
+
+
+    srand(time(NULL));                   // Seed the random number generator
+
+    for(k=0; k<N; k++) 
+    {
+        v[k] = -1.0;                     // Initially set all the velocities to be -1 
+	taken[k] = 0;                    // Indicates that all sites are initially not taken 
+    }
+
+    for(k=0; k<N/2; k++)                 // Main loop gives k/2 random sites with +1 velocities
+    {
+       while(1)                          // Continue until get a number that isn't taken 
+       {
+	    num = rand()%N;
+	    if (taken[num] == 0)         // We have a number that isn't taken 
+	    {
+		taken[num] = 1;          // num is now taken 
+		break;                   // Exit from the loop 
+	    }
+       } 
+       v[num] = 1.0; 	                 // Set velocity of site "num" to be +1 
+    }		 	                 // End of main loop 
+
+
+
+
+
+
+
+
+    
+    			                 // Omit the rest from here once the routine
+		                	 // works
+    sum = 0;		                 // Test if it worked. Print out v[k]'s and the sum.
+    for(k=0; k<N; k++)
+    {
+	printf("v[%2d]= %10.4f\n",k,v[k]); // Print out the velocities 
+	sum += v[k];
+    }
+    printf("sum  = %10.4f\n", sum); // Print out the sum; should be zero.
+
+
+    int t, time = 20;
+    double h = 0.1;
+  
+    double x[N], y[N], F[N];
+    printf("\n\n\n");
+    printf("k   x[k]        v[k]         y[k]       F[k]\n");
+    printf("---------------------------------------------\n");
+
+    
+    for(k=0; k < N; k++)
+    {
+      x[k] = k;                           // equilibrium position x_i = i
+
+      y[k] = x[k] - k;                 // Deviation of particle away from its equil position
+      F[k] = 0;
+      x[N-1] = x[0];
+      F[k] = f( x[k] - x[k+1] ) - f( x[k-1] - x[k] );     //FORCE on particle i
+      printf("%d   %f    %f    %f   %f\n",k, x[k], v[k], y[k], F[k]);
+      for(t=0; t < time; t++)                  //position verlet
+      {
+	y[k] += 0.5 * h * v[k];
+	v[k] += h * F[k];
+	y[k] += 0.5 * h * v[k];             //the new position after F
+      }
+    }
+
+
+
+
+
+    return 0;
+
+}
