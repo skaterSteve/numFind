@@ -8,6 +8,8 @@
  *	After the tree is built, a new point p0 is placed in the grid.
  *	A recursive function is used to find the nearest point.
  *
+ *	Added to git repository on 1/26/14
+ *
  */
 
 #include <stdio.h>
